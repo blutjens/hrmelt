@@ -32,6 +32,32 @@ references/figures/tmp/
 .vscode
 *.code-workspace
 
+# Keep in private, but not in public branch:
+references/*
+README_misc.md
+runs/*/data_s1x
+runs/*/data_v1_2
+runs/*/data_v1_3
+runs/*/default
+todo.md
+runs/all/data_variance
+notebooks/testing_metrics.ipynb
+notebooks/exploring_interpolation.ipynb
+notebooks/exploring_deeplabv3.ipynb
+notebooks/explore_gausian_filter_performance.ipynb
+notebooks/example_batch_input.npy
+notebooks/evaluate_on_station_data.ipynb
+notebooks/download_modis_using_gee.ipynb
+notebooks/scripts/check_for_duplicate_s1a_s1b_data.py
+notebooks/scripts/create_deploy_video.py
+notebooks/scripts/test_data_augmentations.py
+hrmelt/archive
+hrmelt/utils/archive.py
+hrmelt/utils/dice_score.py
+hrmelt/models/srdiff
+hrmelt/models/pix2pix
+hrmelt/data
+
 # From here on it's the template .gitignore for Python:
 # Byte-compiled / optimized / DLL files
 __pycache__/
