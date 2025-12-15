@@ -1,0 +1,136 @@
+# Common parameters are described in runs/unet/data_v1_4/config/config.yaml or runs/deeplabv3/sample/config/config.yaml
+
+# environment/computational parameters
+seed: 42
+device: 'gpu'
+num_workers: 1
+use_deterministic_algorithms: True
+warn_only: True
+
+# debugging and logging
+verbose: True
+log_weight_histograms: False
+path_experiment: './runs/deeplabv3/sample'
+path_wandb: './runs/deeplabv3/sample'
+path_checkpoints: './runs/deeplabv3/sample/checkpoints'
+path_sweep: './runs/deeplabv3/sample/sweep'
+path_sweep_cfg: './runs/deeplabv3/sample/config/sweep.yaml'
+path_predictions: './runs/deeplabv3/sample/predictions'
+path_predictions_deeplabv3: './runs/deeplabv3/sample/predictions'
+path_deploy: '/runs/deeplabv3/sample/deploy/'
+path_eval: './runs/deeplabv3/sample/eval_during_training'
+model_key: 'deeplabv3'
+data_key: 'sample'
+
+# wandb logging
+wandb_entity: 'blutjens'
+wandb_project_name: 'hrmelt-deeplabv3-sample'
+add_wandb_id_to_ckpt_filename: False
+period_wandb_full_scale_im: 1
+log_inputs_and_targets_to_wandb: True
+
+# dataset parameters
+data_root: './data/'
+filetype: '.tif'
+split_cfg: 'csv'
+create_csv_w_split_cfg: True #
+path_train_split_csv: './runs/deeplabv3/sample/config/train.csv'
+path_val_split_csv: './runs/deeplabv3/sample/config/val.csv'
+path_test_split_csv: './runs/deeplabv3/sample/config/test.csv' 
+path_eval_split_csv: './runs/deeplabv3/sample/config/eval.csv'
+path_all_split_csv: './runs/deeplabv3/sample/config/all.csv'
+path_deploy_split_csv: './runs/deeplabv3/sample/config/deploy.csv'
+in_keys: ['pmw', 'mar_wa1']
+in_keys_static: ['dem']
+in_keys_aux: []
+# Paths to data variables
+path_time_interpolate_sar: 'interim/runs/time_interpolate_mar/data_s1x/predictions/'
+path_pmw: 'raw/Helheim_data/sample/PMW/'
+path_modis_b1: 'raw/Helheim_data/sample/MODIS/MOD09GA_b01/'
+path_modis_b2: 'raw/Helheim_data/sample/MODIS/MOD09GA_b02/'
+path_mar_wa1: 'raw/Helheim_data/sample/MAR/MARv3.12/WA1/'
+path_melt: 'raw/Helheim_data/sample/SAR/S1X/HH_PercentMelt/'
+path_melt_reference: 'raw/Helheim_data/sample/SAR/S1X/HH_PercentMelt/2018_09_10.tif'
+# Paths to static variables
+path_landmask: 'raw/Helheim_data/sample/GIMP_Mask/landMask_100m.tif'
+path_dem: 'raw/Helheim_data/sample/GrIMP_DEM/dem_100m.tif'
+mean_pmw: 206.1035919189453
+mean_modis_b1: 0.6493049127465401
+mean_modis_b2: 0.5751748354933877
+mean_mar_wa1: 0.005986050236970186
+mean_melt: 0.1931522637605667
+mean_dem: 1175.09423828125
+std_pmw: 26.77197265625
+std_modis_b1: 0.3393826722741524
+std_modis_b2: 0.30517456763241924
+std_mar_wa1: 0.008952183648943901
+std_melt: 0.3040434420108795
+std_dem: 993.8522338867188
+nodata_modis: -999
+max_modis: 10000
+max_mar_wa1: 1.
+min_melt: 0.
+max_melt: 1.
+
+# Data transformation and augmentation parameters
+use_batch_blur: False
+pmw_GaussianBlur_kernel_size: 45.
+pmw_GaussianBlur_sigma: 15.
+mar_wa1_GaussianBlur_kernel_size: 99.
+mar_wa1_GaussianBlur_sigma: 33.
+
+dtype: 'float32' # datatype for in-, output and model weights
+amp: False # Use mixed precision (only cuda)
+persistent_workers: True
+
+# training hyperparameters
+epochs: 1
+batch_size: 2    
+img_size: [304,304] # img size of [304,304] corresponds to expected size in tu-xception71
+val_percent: 0.34
+test_percent: 0.34
+optimizer: 'adam'
+weight_decay: 0.
+loss_function: 'l1'
+
+# model hyperparameters
+#encoder types and available weights can be found here https://smp.readthedocs.io/en/latest/encoders.html
+#and here https://smp.readthedocs.io/en/latest/encoders_timm.html -> Timm encoders have to start like this tu-<name>
+encoder_name: 'tu-xception71' # Original paper uses 'xception' with coco
+encoder_depth: 5 #Default is 5 -> changing the encoder depth will change the decoder channels
+encoder_weights: 'imagenet' # null or 'imagenet'; using imagenet requires internet connection to download weights
+encoder_output_stride: 8 # default 16
+decoder_channels: 256 # default 256
+decoder_atrous_rates: [6,12,18] # default [12, 24, 36] note that this can create edge artefacts we have to test this
+                                   # up to 36 pixels from the edge
+in_channels: 3 # default 3
+out_channels: 1 # number of out_channels default 1
+out_activation: 'sigmoid' # Activation fn in last layer
+upsampling: 4 # default 4
+activation: 'relu' #['relu', 'gelu', 'tanh'] Activation fn deeplabv3 layers more can be added in decoder (only decoder)
+batch_norm: False # if batch normalization is used in the decoder
+
+### Learning rate
+learning_rate: 0.001
+
+# Step learning rate scheduler 
+# lr_scheduler: 'ReduceLROnPlateau'
+lr_patience: 60
+
+# CosineAnnealingWarmRestarts lerning rate scheduler config
+lr_scheduler: 'CosineAnnealingWarmRestarts'
+use_cosine_annealing: True
+T_0: 35
+T_mult: 2
+eta_min: 0.
+
+periodical_evaluation: True
+epochs_between_periodical_evaluation: 1 #
+starting_epoch: 1
+
+# Evaluation parameters
+prediction_batch_size: 16
+prediction_stride: 240
+# 304 - 2*32 = 240
+erode_size: 32
+apply_landmask_to_predictions: False

@@ -1,0 +1,69 @@
+# Common parameters are described in runs/unet/data_v1_4/config/config.yaml or runs/interpolat_mar/sample/config/config.yaml
+
+# environment/computational parameters
+num_workers: 1
+use_gpu: False
+seed: 42
+
+# debugging and logging
+verbose: True
+path_experiment: './runs/interpolate_mar/sample'
+path_predictions: './runs/interpolate_mar/sample/predictions'
+path_predictions_mar: './runs/interpolate_mar/data_v1_4/predictions'
+path_sweep_cfg: './runs/interpolate_mar/sample/config/sweep.yaml'
+
+wandb_entity: 'blutjens'
+wandb_project_name: 'hrmelt-interpolate_mar-sample'
+model_key: 'interpolate_mar'
+data_key: 'sample'
+save_predictions: True
+
+# dataset parameters
+data_root: './data/'
+filetype: '.tif'
+split_cfg: 'csv'
+create_csv_w_split_cfg: False
+path_train_split_csv: './runs/interpolate_mar/sample/config/train.csv'
+path_val_split_csv: './runs/interpolate_mar/sample/config/val.csv'
+path_test_split_csv: './runs/interpolate_mar/sample/config/test.csv' 
+path_eval_split_csv: './runs/interpolate_mar/sample/config/eval.csv' 
+in_keys: ['mar_wa1']
+in_keys_static: ['landmask']
+in_keys_aux: []
+# Paths to data variables.
+path_melt: 'raw/Helheim_data/sample/SAR/S1X/HH_PercentMelt/'
+path_melt_reference: 'raw/Helheim_data/reprojected_100m/SAR/S1Xv1.2/HH_PercentMelt/2017_04_05.tif'
+path_mar_wa1: 'raw/Helheim_data/sample/MAR/MARv3.12/WA1/'
+# Paths to static variables
+path_landmask: 'raw/Helheim_data/sample/GIMP_Mask/landMask_100m.tif'
+mean_melt: 0.5053594493472049
+std_melt: 0.4618076921046514
+max_mar_wa1: 1.
+min_melt: 0.
+max_melt: 1.
+mean_mar_wa1: 0.010937568731606007
+std_mar_wa1: 0.01700020208954811
+
+# Data transformation and augmentation parameters
+mar_wa1_GaussianBlur_kernel_size: 1.
+mar_wa1_GaussianBlur_sigma: 1.
+
+img_size: [2863, 1633]
+dtype: 'float32'
+
+# Training hyperparameters
+batch_size: 1
+use_cv: True # If true, uses opencv2 to interpolate images. Otherwise, uses torch.
+blur: 'gaussian' # [gaussian, biliteral, average, median]
+kernel_size: 93
+sigma: 33
+brightness_factor: 143.48383700492423 # 61.118
+gamma: 29.176057091328698 # 26.589
+
+mask_threshold: 0.5
+# to set the mask threshold for output prediction images just for visual eval.
+
+# Evaluation parameters
+prediction_batch_size: 1 # Batch processing not implemented for interpolate_mar
+loss_function: 'l1'
+

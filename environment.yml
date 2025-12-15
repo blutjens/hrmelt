@@ -1,0 +1,29 @@
+name: hrmelt
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - pip
+  - matplotlib
+  - scikit-image
+  - scikit-learn
+  - numpy
+  - pandas
+  - jupyter
+  - tqdm
+  - torchvision
+  - rasterio
+  - ipyleaflet
+  - localtileserver
+  - fiona
+  - gdal
+  - pip:
+    - ray
+    - torch
+    - wandb
+    - segmentation-models-pytorch
+    - torcheval # at least needed for R2
+    - torchmetrics # at least needed for SSIM
+    - optuna # for findig best hyperparams in interpolate_mar
+    - torchinfo # for counting model parameters

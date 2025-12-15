@@ -1,0 +1,124 @@
+# Common parameters are described in runs/unet/data_v1_4/config/config.yaml or runs/linear_dem/sample/config/config.yaml
+
+# environment/computational parameters
+seed: 40
+device: 'gpu'
+num_workers: 4
+use_deterministic_algorithms: True
+warn_only: True
+
+# debugging and logging
+verbose: True
+log_weight_histograms: False
+path_experiment: './runs/linear_dem/data_v1_4'
+path_wandb: './runs/linear_dem/data_v1_4'
+path_checkpoints: './runs/linear_dem/data_v1_4/checkpoints'
+path_sweep: './runs/linear_dem/data_v1_4/sweep'
+path_sweep_cfg: './runs/linear_dem/data_v1_4/config/sweep.yaml'
+path_predictions: './runs/linear_dem/data_v1_4/predictions'
+path_predictions_linear_dem: './runs/linear_dem/data_v1_4/predictions'
+path_deploy: '/home/gridsan/lutjens/EarthIntelligence_shared/datasets/hrmelt/interim/runs/linear_dem/data_v1_4/deploy/'
+path_eval: './runs/linear_dem/data_v1_4/eval_during_training'
+model_key: 'linear_dem'
+data_key: 'data_v1_4'
+
+# wandb logging
+wandb_entity: 'blutjens'
+wandb_project_name: 'hrmelt-linear_dem-data_v1_4'
+add_wandb_id_to_ckpt_filename: False
+period_wandb_full_scale_im: 1 
+log_inputs_and_targets_to_wandb: True
+
+# dataset parameters
+data_root: '/home/gridsan/lutjens/EarthIntelligence_shared/datasets/hrmelt/'
+filetype: '.tif'
+# Change this parameter to create new splits from 
+split_cfg: 'csv'
+create_csv_w_split_cfg: False
+path_train_split_csv: './runs/linear_dem/data_v1_4/config/train.csv'
+path_val_split_csv: './runs/linear_dem/data_v1_4/config/val.csv'
+path_test_split_csv: './runs/linear_dem/data_v1_4/config/test.csv' 
+path_eval_split_csv: './runs/linear_dem/data_v1_4/config/eval.csv'
+path_all_split_csv: './runs/linear_dem/data_v1_4/config/all.csv' 
+path_deploy_split_csv: './runs/linear_dem/data_v1_4/config/deploy.csv'
+in_keys: []
+in_keys_static: ['dem']
+in_keys_aux: ['time_month_idx']
+# Paths to data variables; relative to data_root
+path_time_interpolate_sar: 'interim/runs/time_interpolate_sar/data_v1_4/predictions/'
+path_pmw: 'raw/Helheim_data/reprojected_100m/PMW/'
+path_modis_b1: 'raw/Helheim_data/reprojected_100m/MODIS/MOD09GA_b01/'
+path_modis_b2: 'raw/Helheim_data/reprojected_100m/MODIS/MOD09GA_b02/'
+path_mar_wa1: 'raw/Helheim_data/reprojected_100m/MAR/MARv3.14_nearest/WA1/'
+path_melt: 'raw/Helheim_data/reprojected_100m/SAR/S1Xv1.2/HH_PercentMelt/'
+path_melt_reference: 'raw/Helheim_data/reprojected_100m/SAR/S1Xv1.2/HH_PercentMelt/2017_04_05.tif'
+# Paths to static variables
+path_landmask: 'raw/Helheim_data/reprojected_100m/GIMP_Mask/landMask_100m.tif'
+path_dem: 'raw/Helheim_data/reprojected_100m/GrIMP_DEM/dem_100m.tif'
+mean_pmw: 206.1035919189453
+mean_modis_b1: 0.6493049127465401
+mean_modis_b2: 0.5751748354933877
+mean_mar_wa1: 0.005986050236970186
+mean_melt: 0.1931522637605667
+mean_dem: 1175.09423828125
+std_pmw: 26.77197265625
+std_modis_b1: 0.3393826722741524
+std_modis_b2: 0.30517456763241924
+std_mar_wa1: 0.008952183648943901
+std_melt: 0.3040434420108795
+std_dem: 993.8522338867188
+nodata_modis: -999
+max_modis: 10000
+max_mar_wa1: 1.
+min_melt: 0.
+max_melt: 1.
+
+# Data transformation and augmentation parameters
+use_batch_blur: False
+pmw_GaussianBlur_kernel_size: 45.
+pmw_GaussianBlur_sigma: 15.
+mar_wa1_GaussianBlur_kernel_size: 99.
+mar_wa1_GaussianBlur_sigma: 33.
+
+dtype: 'float32' # 
+amp: False
+persistent_workers: True
+
+# model hyperparameters
+n_models: 12
+time_channel_idx: 1
+
+# training hyperparameters
+epochs: 12
+batch_size: 16
+img_size: [2863, 1633]
+val_percent: 0.11
+test_percent: 0.11
+optimizer: 'adam'
+weight_decay: 0.
+loss_function: 'mse'
+out_activation: 'tanhshelf'
+activation: 'linear'
+out_channels: 1
+
+### Learning rate
+learning_rate: 5.
+# Step learning rate scheduler 
+lr_scheduler: 'ReduceLROnPlateau'
+lr_patience: 2
+
+# CosineAnnealingWarmRestarts lerning rate scheduler config
+# lr_scheduler: 'CosineAnnealingWarmRestarts'
+T_0: 35
+T_mult: 2
+eta_min: 0.
+
+periodical_evaluation: True
+epochs_between_periodical_evaluation: 5
+starting_epoch: 1
+
+# Evaluation parameters
+prediction_batch_size: 1
+prediction_stride: null
+erode_size: 0
+apply_landmask_to_predictions: False

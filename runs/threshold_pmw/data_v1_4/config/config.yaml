@@ -1,0 +1,65 @@
+# Common parameters are described in runs/unet/data_v1_4/config/config.yaml
+
+# environment/computational parameters
+num_workers: 4
+use_gpu: True # if True, tries to use gpu and cuda if it is available. Otherwise uses cpu
+seed: 42
+use_deterministic_algorithms: True
+
+# debugging and logging
+verbose: True
+path_experiment: './runs/threshold_pmw/data_v1_4'
+path_predictions: './runs/threshold_pmw/data_v1_4/predictions'
+path_predictions_pmw: './runs/threshold_pmw/data_v1_4/predictions'
+path_deploy: '/home/gridsan/lutjens/EarthIntelligence_shared/datasets/hrmelt/interim/runs/threshold_pmw/data_v1_4/deploy/'
+path_sweep_cfg: './runs/threshold_pmw/data_v1_4/config/sweep.yaml'
+path_wandb: './runs/threshold_pmw/data_v1_4'
+wandb_entity: 'blutjens'
+wandb_project_name: 'hrmelt-threshold_pmw-data_v1_4'
+model_key: 'threshold_pmw'
+data_key: 'data_v1_4'
+save_predictions: True
+
+# dataset parameters
+data_root: '/home/gridsan/lutjens/EarthIntelligence_shared/datasets/hrmelt/'
+filetype: '.tif'
+# Change this parameter to create new splits from 
+split_cfg: 'csv'
+ 
+ 
+create_csv_w_split_cfg: False
+path_train_split_csv: './runs/threshold_pmw/data_v1_4/config/train.csv'
+path_val_split_csv: './runs/threshold_pmw/data_v1_4/config/val.csv'
+path_test_split_csv: './runs/threshold_pmw/data_v1_4/config/test.csv' 
+path_eval_split_csv: './runs/threshold_pmw/data_v1_4/config/eval.csv' 
+path_all_split_csv: './runs/threshold_pmw/data_v1_4/config/all.csv' 
+path_deploy_split_csv: './runs/threshold_pmw/data_v1_4/config/deploy.csv'
+in_keys: ['pmw']
+in_keys_static: ['landmask']
+in_keys_aux: ['pmw_winter_mean']
+# Paths to data variables; relative to data_root
+path_melt: 'raw/Helheim_data/reprojected_100m/SAR/S1Xv1.2/HH_PercentMelt/'
+path_melt_reference: 'raw/Helheim_data/reprojected_100m/SAR/S1Xv1.2/HH_PercentMelt/2017_04_05.tif' # Path to a meltwater.tif that is used to save the deploy predictions with the same metadata
+path_pmw: 'raw/Helheim_data/reprojected_100m/PMWv1.0/'
+path_pmw_winter_mean: 'interim/Helheim_data/reprojected_100m/PMWv1.0_winter_means/'
+# Paths to static variables
+path_landmask: 'raw/Helheim_data/reprojected_100m/GIMP_Mask/landMask_100m.tif'
+
+normalize_inputs: False # Threshold is calculated on unnormalized PMW
+mean_melt: 0.1931522637605667
+std_melt: 0.3040434420108795
+min_melt: 0.
+max_melt: 1.
+
+img_size: [2863, 1633]
+dtype: 'float32'
+
+# Training hyperparameters
+batch_size: 8
+loss_function: 'l1'
+mask_threshold: 0.5 # to set the mask threshold for output prediction images just for visual eval.
+pmw_GaussianBlur_kernel_size: 1
+pmw_GaussianBlur_sigma: 1
+
+# Evaluation parameters
+prediction_batch_size: 1 # Batch processing not implemented for threhold_pmw

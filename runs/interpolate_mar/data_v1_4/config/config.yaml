@@ -1,0 +1,70 @@
+# Common parameters are described in runs/unet/data_v1_4/config/config.yaml or runs/interpolat_mar/sample/config/config.yaml
+
+# environment/computational parameters
+num_workers: 4
+use_gpu: True
+seed: 42
+
+# debugging and logging
+verbose: True
+path_experiment: './runs/interpolate_mar/data_v1_4'
+path_predictions: './runs/interpolate_mar/data_v1_4/predictions'
+path_predictions_mar: './runs/interpolate_mar/data_v1_4/predictions'
+path_deploy: '/home/gridsan/lutjens/EarthIntelligence_shared/datasets/hrmelt/interim/runs/interpolate_mar/data_v1_4/deploy/'
+path_sweep_cfg: './runs/interpolate_mar/data_v1_4/config/sweep.yaml'
+path_wandb: './runs/interpolate_mar/data_v1_4'
+wandb_entity: 'blutjens'
+wandb_project_name: 'hrmelt-interpolate_mar-data_v1_4'
+model_key: 'interpolate_mar'
+data_key: 'data_v1_4'
+save_predictions: True
+
+# dataset parameters
+data_root: '/home/gridsan/lutjens/EarthIntelligence_shared/datasets/hrmelt/'
+filetype: '.tif'
+split_cfg: 'csv'
+create_csv_w_split_cfg: False
+path_train_split_csv: './runs/interpolate_mar/data_v1_4/config/train.csv'
+path_val_split_csv: './runs/interpolate_mar/data_v1_4/config/val.csv'
+path_test_split_csv: './runs/interpolate_mar/data_v1_4/config/test.csv' 
+path_eval_split_csv: './runs/interpolate_mar/data_v1_4/config/eval.csv' 
+path_all_split_csv: './runs/interpolate_mar/data_v1_4/config/all.csv' 
+path_deploy_split_csv: './runs/interpolate_mar/data_v1_4/config/deploy.csv'
+in_keys: ['mar_wa1']
+in_keys_static: ['landmask']
+in_keys_aux: []
+# Paths to data variables; relative to data_root
+path_melt: 'raw/Helheim_data/reprojected_100m/SAR/S1Xv1.2/HH_PercentMelt/'
+path_melt_reference: 'raw/Helheim_data/reprojected_100m/SAR/S1Xv1.2/HH_PercentMelt/2017_04_05.tif'
+path_mar_wa1: 'raw/Helheim_data/reprojected_100m/MAR/MARv3.14_nearest/WA1/'
+# Paths to static variables
+path_landmask: 'raw/Helheim_data/reprojected_100m/GIMP_Mask/landMask_100m.tif'
+mean_melt: 0.1931522637605667
+std_melt: 0.3040434420108795
+max_mar_wa1: 1.
+min_melt: 0.
+max_melt: 1.
+mean_mar_wa1: 0.005986050236970186
+std_mar_wa1: 0.008952183648943901
+
+# Data transformation and augmentation parameters
+mar_wa1_GaussianBlur_kernel_size: 1.
+mar_wa1_GaussianBlur_sigma: 1.
+
+img_size: [2863, 1633]
+dtype: 'float32'
+
+# Training hyperparameters
+batch_size: 8
+use_cv: False
+blur: 'gaussian'
+kernel_size: 93
+sigma: 33
+brightness_factor: 143.48383700492423
+gamma: 29.176057091328698
+
+mask_threshold: 0.5
+
+# Evaluation parameters
+prediction_batch_size: 1
+loss_function: 'l1'

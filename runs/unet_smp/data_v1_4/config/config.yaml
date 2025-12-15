@@ -1,0 +1,158 @@
+# data_v1_4 change log (wrt. data_v1_3):
+#  Implements a stratified data split across time instead of a random split across time.
+
+# environment/computational parameters
+seed: 42
+device: 'gpu' # cpu or gpu
+num_workers: 18
+use_deterministic_algorithms: True # Set torch layers to deterministic or raises error
+warn_only: True # warn_only for using deterministic algorithms; 
+
+# debugging and logging
+verbose: True
+log_weight_histograms: False # If true, wandb will log
+  # distribution plots of weights and gradients on every
+  # evaluation epoch
+path_experiment: './runs/unet_smp/data_v1_4' # Path to current experiment
+path_wandb: './runs/unet_smp/data_v1_4' # Store wandb logs
+path_checkpoints: './runs/unet_smp/data_v1_4/checkpoints' # Store model checkpoints
+path_sweep: './runs/unet_smp/data_v1_4/sweep' # If train.py is run with --sweep, the wandb and checkpoints will be stored in subfolders of this directory
+path_sweep_cfg: './runs/unet_smp/data_v1_4/config/sweep.yaml' # Path to hyperparameter sweep config yaml. Only used if args.sweep == True
+path_predictions: './runs/unet_smp/data_v1_4/predictions' # Store model predictions
+path_predictions_unet_smp: './runs/unet_smp/data_v1_4/predictions'
+path_deploy: '/home/gridsan/lutjens/EarthIntelligence_shared/datasets/hrmelt/interim/runs/unet_smp/data_v1_4/deploy/' # Store model predictions for every single day in target range
+path_eval: './runs/unet_smp/data_v1_4/eval_during_training' # Stores temporary predictions during training; path is overwritten if sweep=True
+model_key: 'unet_smp' # This should match the hrmelt/models/<model_key>/.. ; used for reusing train.py, etc. between models
+data_key: 'data_v1_4'
+
+# wandb logging
+wandb_entity: 'blutjens' # If null, wandb will use the default entity
+wandb_project_name: 'hrmelt-unet_smp-data_v1_4'
+add_wandb_id_to_ckpt_filename: False # If True, the wandb run id will be added to the checkpoint filename when saving the 
+  # model weights. By default this is turned off to avoid expansive models stored to disk.
+period_wandb_full_scale_im: 10 # period in between every full-scale evaluation to should display 
+  # associated full-scale images in wandb. For example, with epochs_between_periodical_evaluation=10, 
+  # period_wandb_full_scale_im=5, and starting_epoch=1 images would be logged on epoch 1, 51, 101, 151, .... 
+  # If not set, defaults to 1. This parameter exists to reduce storage on wandb.
+log_inputs_and_targets_to_wandb: True # If True, input, targets will be logged to wandb
+  # during training. This is useful for debugging, but will increase the amount of data stored on wandb.
+
+# dataset parameters
+# data_root: '/mnt/c/Users/Bjoern/code/hrmelt/data/raw/reprojected_100m/'
+data_root: '/home/gridsan/lutjens/EarthIntelligence_shared/datasets/hrmelt/'
+filetype: '.tif'
+# Change this parameter to create new splits from 
+split_cfg: 'csv' # Axis to split the dataset. 
+  # 'day' will create a random across every day, using all complete sets of  
+  # 'csv' will use .csv files that contain the train, val, test image filenames
+  # 'stratified_time' will create a train,val,test split with approx. equal number of images in each month
+create_csv_w_split_cfg: False # If True and split_cfg != 'csv', this will save and overwrites the created split cfg as a csv
+path_train_split_csv: './runs/unet_smp/data_v1_4/config/train.csv' # If split_cfg == 'csv', this path specifies a csv with image filenames used for training
+path_val_split_csv: './runs/unet_smp/data_v1_4/config/val.csv' # Image filenames used during validation
+path_test_split_csv: './runs/unet_smp/data_v1_4/config/test.csv'  # Image filenames used during test
+path_eval_split_csv: './runs/unet_smp/data_v1_4/config/eval.csv' # used to create predictions for wandb
+path_all_split_csv: './runs/unet_smp/data_v1_4/config/all.csv' # All filenames (train+val+test)
+path_deploy_split_csv: './runs/unet_smp/data_v1_4/config/deploy.csv' # All days for which to run the trained model without any verification.
+val_percent: 0.11 # If split_cfg == 'day', this sets the ratio of dataset that is used for validation. Range is [0,1.]
+test_percent: 0.11
+n_imgs_per_month: 2 # If split_cfg == 'stratified_time', this sets the number of images per month
+check_for_invalid_entries: False # If True and create_csv_w_split_cfg==True, some channels will be checked for invalid entries. This process can take ~5min.
+in_keys: ['pmw', 'mar_wa1', 'time_interpolate_sar']
+in_keys_static: ['dem'] # ['dem', 'landmask']
+in_keys_aux: [] # ['time_month_idx','time_sin','time_cos'] # Input modalities that are not stored as images on file, e.g., time embedding
+# Paths to data variables; relative to data_root
+path_time_interpolate_sar: 'interim/runs/time_interpolate_sar/data_v1_4/predictions/'
+path_pmw: 'raw/Helheim_data/reprojected_100m/PMWv1.0/'
+path_modis_b1: 'raw/Helheim_data/reprojected_100m/MODIS/MOD09GA_b01/'
+path_modis_b2: 'raw/Helheim_data/reprojected_100m/MODIS/MOD09GA_b02/'
+path_mar_wa1: 'raw/Helheim_data/reprojected_100m/MAR/MARv3.14_nearest/WA1/'
+path_melt: 'raw/Helheim_data/reprojected_100m/SAR/S1Xv1.2/HH_PercentMelt/'
+path_melt_reference: 'raw/Helheim_data/reprojected_100m/SAR/S1Xv1.2/HH_PercentMelt/2017_04_05.tif' # Path to a meltwater.tif that is used to save the deploy predictions with the same metadata
+# Paths to static variables
+path_landmask: 'raw/Helheim_data/reprojected_100m/GIMP_Mask/landMask_100m.tif'
+path_dem: 'raw/Helheim_data/reprojected_100m/GrIMP_DEM/dem_100m.tif'
+# The mean and std were calculated on the 370 imgs in the data_v1_4 train set 
+mean_pmw: 206.1035919189453
+mean_modis_b1: 0.6493049127465401 # mean after scaling. todo: calc. correct value on masked modis whole dataset
+mean_modis_b2: 0.5751748354933877 # todo: calc. correct value
+mean_mar_wa1: 0.005986050236970186
+mean_melt: 0.1931522637605667
+mean_dem: 1175.09423828125
+std_pmw: 26.77197265625
+std_modis_b1: 0.3393826722741524 # std. after scaling. todo: calc. correct value
+std_modis_b2: 0.30517456763241924 # todo: calc. correct value
+std_mar_wa1: 0.008952183648943901
+std_melt: 0.3040434420108795
+std_dem: 993.8522338867188
+nodata_modis: -999 # no_data value
+max_modis: 10000 # max value in modis
+max_mar_wa1: 1.
+min_melt: 0. # minimum value of ground-truth meltwater. Used e.g., to clip outputs in predict.py
+max_melt: 1. # maximum value of ground-truth meltwater
+
+# Data transformation and augmentation parameters
+#  GaussianBlur is applied deterministic and smoothes out sharp edges in input
+# If true, calculates GaussianBlur in the collate_fn on GPU otherwise applies GaussianBlur on CPU in dataset.__getitem__()
+use_batch_blur: False
+pmw_GaussianBlur_kernel_size: 45. # Default 1. equals no augmentation
+pmw_GaussianBlur_sigma: 15. # Default 1. equals no augmentation
+mar_wa1_GaussianBlur_kernel_size: 99. # Default 1. equals no augmentation
+mar_wa1_GaussianBlur_sigma: 33. # Default 1. equals no augmentation
+
+dtype: 'float32' # datatype for in-, output and model weights
+amp: False # Use mixed precision (only cuda)
+persistent_workers: True
+
+# training hyperparameters
+epochs: 3 # Number of epochs; see comments when using CosineAnnealingWarmRestarts
+batch_size: 8 # Batch size
+img_size: [512,512] # height, width
+optimizer: 'adam' # Optimization algorithm
+weight_decay: 0.
+loss_function: 'l1' # Loss function, e.g., 'l1' or 'mse'
+activation: 'relu' # unet_smp only has relu implemented
+out_activation: 'sigmoid' # Activation fn in last layer
+out_channels: 1 # Integer number of out_channels
+encoder_name: 'tu-xception71' # 'tu-xception71', 'tu-convnext_tiny'
+encoder_weights: 'imagenet'
+encoder_depth: 5
+decoder_use_batchnorm: False
+decoder_interpolation_mode: 'bilinear'
+
+### Learning rate
+learning_rate: 0.0001
+
+# Step learning rate scheduler 
+# lr_scheduler: 'ReduceLROnPlateau'
+lr_patience: 100 # Number of steps on validation loss platenau until lr scheduler reduces lr
+
+# CosineAnnealingWarmRestarts lerning rate scheduler config
+#  For a visual reference see: https://towardsdatascience.com/a-visual-guide-to-learning-rate-schedulers-in-pytorch-24bbb262c863
+lr_scheduler: 'CosineAnnealingWarmRestarts'
+use_cosine_annealing: True
+T_0: 35 # Number of epochs until first restart; 
+T_mult: 2 # A factor increases Ti after a restart. 
+# E.g., First restart after T_0 epochs and then 2nd restart after T_0*T_mult epochs
+# With T_0 = 35 and T_mult = 2, the training can be nicely stopped at 525 epocsh: (1+ 2+ 4+ 8) *35 = 525
+# Alternatively, (1+ 2+ 4+ 8+16) *35 = 1085 or (1+2+4+8+16+32) *35 = 2205
+eta_min: 0. # Minimum learning rate. Default: 0.
+
+# Logging a more stable evaluation metric to wandb this will evaluate on a static eval dataset and whole tiffs.
+# we implemented this because the validation step while training will take random tiles from the val split.
+# this will lead to a unstable validation metric.
+periodical_evaluation: True
+epochs_between_periodical_evaluation: 10 # period in epochs between evalutions
+epochs_between_checkpoint_save: 1 # period in epochs between saving checkpoints
+starting_epoch: 1 # epochs before starting evaluation
+
+# Evaluation parameters
+prediction_batch_size: 8
+prediction_stride: 480 # Default recommendation during training: prediction_stride = img_size - 2*erode_size
+# 512 - 2*16 = 480
+# Default rec for deploy: 512 - 2*24 = 464 / 2 = 232
+# Default rec for deploy: 512 - 2*32 = 448 / 2 = 224
+# Default rec for deploy: 512 - 2*48 = 416 / 2 = 208
+# Default rec for deploy: 512 - 2*24 = 464 / 4 = 116
+# Default rec for deploy: 512 - 2*24 = 464 / 8 = 58
+erode_size: 16
+apply_landmask_to_predictions: False

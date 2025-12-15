@@ -1,0 +1,19 @@
+loss_function: ['l1'] # Currently only using l1, because I'm using validation loss to find best model
+epochs: [1085]
+batch_size: [16]
+num_workers: [18]
+img_size: [[304,304]] #trying 299 because xception encoder is optimized for (299, 299)
+encoder_name: ['tu-xception71'] # 'resnet34', 'resnet50', 'resnet101','resnet152','tu-xception41p', 'tu-xception71'] # increasing encoder size
+learning_rate: [0.01, 0.001, 0.0001] # see if the learning rate still has to be optimized
+weight_decay: [0.]
+optimizer: ['adam']
+activation: ['relu']
+decoder_atrous_rates: [[6,12,18]] #,[12,24,36],[24,48,72]]
+encoder_output_stride: [8] # , 16]
+# comparing baseline to different atrous rates to get a better understanding
+lr_scheduler: [CosineAnnealingWarmRestarts] # , ReduceLROnPlateau] # using new cosine annealing to se if the model avoids local minima better
+lr_patience: [60]
+period_wandb_full_scale_im: [10] # To reduce storage on wandb during sweep
+log_inputs_and_targets_to_wandb: [False] # To reduce storage on wandb during sweep
+# 2*3*2*3*2=72
+# 6 * 3  = 18

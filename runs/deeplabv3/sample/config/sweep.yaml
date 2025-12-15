@@ -1,0 +1,9 @@
+epochs: [50] # Running more epochs to make sure bigger models will also train
+batch_size: [4]     # Currently not varying over batch size, because I'm unsure how batch norm behaves during validation
+img_size: [[32, 32], [64, 64]] # [[32,32], [128,128], [256,256], [512,512]] # height, width
+learning_rate: [0.00001]  # Learning rate
+lr_patience: [10]
+weight_decay: [0.01]
+loss_function: ['l1'] # Currently only using l1, because I'm using validation loss to find best model
+activation: ['gelu'] # Only gelu and relu are implemented
+num_extra_convs: [0]

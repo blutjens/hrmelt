@@ -1,0 +1,46 @@
+# Common parameters are described in runs/unet/data_v1_4/config/config.yaml or runs/time_interpolate_sar/sample/config/config.yaml
+
+# environment/computational parameters
+seed: 42
+num_workers: 4
+
+# debugging and logging
+verbose: True
+path_experiment: './runs/time_interpolate_sar/data_v1_4'
+path_predictions: './runs/time_interpolate_sar/data_v1_4/predictions/'
+path_deploy: '/home/gridsan/lutjens/EarthIntelligence_shared/datasets/hrmelt/interim/runs/time_interpolate_sar/data_v1_4/deploy/'
+
+# dataset parameters
+data_root: '/home/gridsan/lutjens/EarthIntelligence_shared/datasets/hrmelt/'
+filetype: '.tif'
+split_cfg: 'csv'
+create_csv_w_split_cfg: False
+path_train_split_csv: './runs/time_interpolate_sar/data_v1_4/config/train.csv'
+path_val_split_csv: './runs/time_interpolate_sar/data_v1_4/config/val.csv'
+path_test_split_csv: './runs/time_interpolate_sar/data_v1_4/config/test.csv' 
+path_all_split_csv: './runs/time_interpolate_sar/data_v1_4/config/all.csv'
+path_deploy_split_csv: './runs/time_interpolate_sar/data_v1_4/config/deploy.csv'
+# path_deploy_split_csv: './runs/time_interpolate_sar/data_v1_4/config/deploy-2021to2023.csv'
+in_keys: []
+in_keys_static: ['landmask']
+# Paths to data variables; relative to data_root
+path_melt: 'raw/Helheim_data/reprojected_100m/SAR/S1Xv1.2/HH_PercentMelt/'
+# Paths to static variables
+path_landmask: 'raw/Helheim_data/reprojected_100m/GIMP_Mask/landMask_100m.tif'
+path_dem: 'raw/Helheim_data/reprojected_100m/GrIMP_DEM/dem_100m.tif'
+max_mar_wa1: 1.
+min_melt: 0.
+max_melt: 1.
+
+dtype: 'float32'
+
+# model hyperparameters
+img_size: [2863, 1633]
+n_previous_dates: 3
+n_posterior_dates: 3
+
+# Evaluation parameters
+prediction_batch_size: 1
+
+deploy_start_time: '2017_04_01' # '2021_04_01'
+deploy_end_time: '2023_09_30'

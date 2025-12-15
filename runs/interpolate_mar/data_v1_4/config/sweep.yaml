@@ -1,0 +1,25 @@
+blur: ['gaussian'] # 'average', 'biliteral', 'average', 'median']
+kernel_size_min: 91
+kernel_size_max: 201
+sigma_min: 33
+sigma_max: 99
+gamma_min: 0.001
+gamma_max: 30
+brightness_factor_min: 40
+brightness_factor_max: 200
+save_predictions: [False]
+
+#program: predict.py
+#method: bayes
+#command:
+#  - ${env}
+#  - python3
+#  - ${program}
+#  - "--cfg_path runs/interpolate_mar/sample/config/config.yaml --verbose true --sweep"
+#metric:
+#  name: l1_loss
+#  goal: minimize
+#parameters:
+#  blur: [ "gaussian", "biliteral", "average", "median" ]
+#  kernel_size: [ 1, 21, 41, 61, 81, 99 ]
+#  sigma: [ 1, 11, 21, 33 ]
