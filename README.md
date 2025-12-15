@@ -49,12 +49,12 @@ python hrmelt/predict.py --parallel --cfg_path runs/unet/sample/config/config.ya
 git lfs install # Init lfs
 ssh -T git@hf.co # Test ssh connection
 # Download the core dataset and created product (~100GB)
-git clone git@hf.co:datasets/blutjens/hrmelt --branch main --single-branch
+git clone git@hf.co:datasets/blutjens/meltwaterbench --branch main --single-branch
 # Open the config at `runs/unet_smp/data_v1_4/config/config.yaml` and set `data_root: /path/to/the/downloaded/data`. Repeat process for every baseline model you're reproducing.
 # Optional: Access the created 100m daily product in the main branch at:
 ./interim/runs/unet_smp/data_v1_4/deploy
 # Optional: Download the auxiliary dataset (~250GB) with:
-git clone git@hf.co:datasets/blutjens/hrmelt --branch S1Xv1.2_aux --single-branch
+git clone git@hf.co:datasets/blutjens/meltwaterbench --branch S1Xv1.2_aux --single-branch
 ```
 
 #### Train the more complex UNet
