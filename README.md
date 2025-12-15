@@ -253,3 +253,14 @@ Evaluation kills processing, running out of memory:
 The torchmetrics implementation of ssim is know to keep too much in memory. On my laptop that crashes the evaluation. Either update torchmetrics, because I think they fixed this issue. Or, increase memory or pass --exclude_ssim to train.py
 
 ```
+
+# Reference
+If this analysis is useful for your analysis please consider citing:
+```
+@misc{lutjens25meltwaterbench,
+      title={MeltwaterBench: Deep learning for spatiotemporal downscaling of surface meltwater}, 
+      author={Bj\"orn L\"utjens and Patrick Alexander and Raf Antwerpen and Til Widmann and Guido Cervone and Marco Tedesco},
+      year={2025},
+      journal = {arXiv},
+}
+```
