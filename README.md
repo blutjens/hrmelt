@@ -8,8 +8,8 @@ Official repository for the paper 'MeltwaterBench: Deep learning for spatiotempo
 ## Installation
 We recommend installing the project via [conda](https://docs.conda.io/en/latest/).
 ```
-git clone git@github.com:blutjens/hrmelt.git
-cd hrmelt
+git clone git@github.com:blutjens/meltwaterbench.git
+cd meltwaterbench
 conda env create -f environment.yml
 conda activate hrmelt
 pip install -e .
@@ -251,4 +251,5 @@ export HF_DATASETS_OFFLINE=1
 Evaluation kills processing, running out of memory:
 ```
 The torchmetrics implementation of ssim is know to keep too much in memory. On my laptop that crashes the evaluation. Either update torchmetrics, because I think they fixed this issue. Or, increase memory or pass --exclude_ssim to train.py
+
 ```
