@@ -2,7 +2,7 @@
 
 Official repository for the paper 'MeltwaterBench: Deep learning for spatiotemporal downscaling of surface meltwater'. We set-up a benchmark dataset for spatiotemporally downscaling a regional climate model, passive microwave, and digital elevation model onto high-resolution synthetic aperture radar-derived observations of surface meltwater, as shown in Fig. 1. This code contains all steps necessary to reproduce the results in the paper, including the data download, fitting baselines, and running evaluation. 
 
-- To reproduce the paper follow the instructions on [installation](#Installation), [data download](#download-dataset), [config edit](#Edit-the-config-files), and [model training](#Train-machine-learning-model)
+- To reproduce the paper follow the instructions on [installation](#Installation), [data download](#download-dataset), and [model training](#Train-the-more-complex-UNet)
 - To add a new model, please see the instruction in [adding a new model](#Adding-a-new-model)
 - To get more information see the [preprint](https://arxiv.org/abs/2512.12142) or a video of the [generated 100m product](https://www.youtube.com/watch?v=OaonUT6dIbg).
 
@@ -269,6 +269,7 @@ If this analysis is useful for your analysis please consider citing:
       url = {https://arxiv.org/abs/2512.12142},
 }
 ```
+
 
 
 
