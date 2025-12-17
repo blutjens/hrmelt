@@ -4,7 +4,7 @@ Official repository for the paper 'MeltwaterBench: Deep learning for spatiotempo
 
 - To reproduce the paper follow the instructions on [installation](#Installation), [data download](#download-dataset), [config edit](#Edit-the-config-files), and [model training](#Train-machine-learning-model)
 - To add a new model, please see the instruction in [adding a new model](#Adding-a-new-model)
-- You can read the paper [here](https://arxiv.org/abs/2512.12142)
+- To get more information see the [preprint](https://arxiv.org/abs/2512.12142) or a video of the [generated 100m product](https://www.youtube.com/watch?v=OaonUT6dIbg).
 
 Fig. 1, MeltwaterBench downscaling task
 <img width="1255" height="540" alt="image" src="https://github.com/user-attachments/assets/41132419-6be3-4087-b905-1ee56e7aae6e" />
@@ -269,5 +269,6 @@ If this analysis is useful for your analysis please consider citing:
       url = {https://arxiv.org/abs/2512.12142},
 }
 ```
+
 
 
