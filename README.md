@@ -262,5 +262,6 @@ If this analysis is useful for your analysis please consider citing:
       author={Bj\"orn L\"utjens and Patrick Alexander and Raf Antwerpen and Til Widmann and Guido Cervone and Marco Tedesco},
       year={2025},
       journal = {arXiv},
+      url = {https://arxiv.org/abs/2512.12142},
 }
 ```
