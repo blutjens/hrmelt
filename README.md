@@ -43,22 +43,49 @@ This creates large tifs by convoluting the tile-predicting model across the imag
 python hrmelt/predict.py --parallel --cfg_path runs/unet/sample/config/config.yaml --load runs/unet/sample/checkpoints/checkpoint_epoch5.pth
 ```
 
-## Reproduce paper results
-#### Download dataset
+## Download dataset
+#### Preferred option via git
 ```
-# Create a huggingface account (https://huggingface.co/join)
-# Request access to the huggingface dataset
-# Add the public ssh key you're using for git to your huggingface profile (https://huggingface.co/docs/hub/security-git-ssh). You may find it with `cat ~/.ssh/id_ed25519.pub`
 # Make sure you have git-lfs installed (https://git-lfs.github.com/)
 git lfs install # Init lfs
-ssh -T git@hf.co # Test ssh connection
 # Download the core dataset and created product (~100GB)
-git clone git@hf.co:datasets/blutjens/meltwaterbench --branch main --single-branch
-# Open the config at `runs/unet_smp/data_v1_4/config/config.yaml` and set `data_root: /path/to/the/downloaded/data`. Repeat process for every baseline model you're reproducing.
-# Optional: Access the created 100m daily product in the main branch at:
+git clone https://huggingface.co/datasets/blutjens/meltwaterbench --branch main --single-branch
+# Test by looking at the created 100m daily product at:
 ./interim/runs/unet_smp/data_v1_4/deploy
-# Optional: Download the auxiliary dataset (~250GB) with:
+```
+#### Optional data instructions
+Optional: Download dataset via huggingface_hub. Avoids git lfs, but may be rate limited.
+```
+# Install huggingface_hub in a virtual environemnt (e.g., conda activate hrmelt)
+pip install huggingface_hub
+# Open a Python command line interface
+python
+# Run this Python script to download the core dataset and created product (~100GB)
+from huggingface_hub import snapshot_download
+snapshot_download(
+  repo_id="blutjens/meltwaterbench",
+  repo_type='dataset',
+  revision="main",
+  cache_dir="./" # Path to store dataset
+)
+```
+Optional: Download via git with ssh access
+```
+# Create a huggingface account (https://huggingface.co/join)
+# Add the public ssh key you're using for git to your huggingface profile (https://huggingface.co/docs/hub/security-git-ssh). You may find it with `cat ~/.ssh/id_ed25519.pub`
+ssh -T git@hf.co # Test ssh connection
+git clone git@hf.co:datasets/blutjens/meltwaterbench --branch main --single-branch
+```
+Optional: Download the auxiliary dataset (~250GB) with:
+```
 git clone git@hf.co:datasets/blutjens/meltwaterbench --branch S1Xv1.2_aux --single-branch
+```
+
+
+## Reproduce paper results
+#### Setup data config
+```
+Open the config at `runs/unet_smp/data_v1_4/config/config.yaml` and set `data_root: /path/to/store/dataset`. Repeat process for every baseline model you're reproducing.
 ```
 
 #### Train the more complex UNet
